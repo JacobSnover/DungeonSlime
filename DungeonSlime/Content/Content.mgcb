@@ -13,11 +13,6 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin File.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:File.xml
-
 #begin Images/logo.png
 /importer:TextureImporter
 /processor:TextureProcessor

@@ -48,7 +48,7 @@ public class Game1 : Core
 
         // TODO: Add your drawing code here
         SpriteBatch.Begin();
-        SpriteBatch.Draw(_logo, Vector2.Zero, Color.White);
+        SpriteBatch.Draw(_logo, new Vector2(100, 100), Color.YellowGreen);
         SpriteBatch.End();
 
         base.Draw(gameTime);
