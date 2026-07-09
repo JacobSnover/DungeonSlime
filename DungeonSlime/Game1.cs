@@ -113,13 +113,14 @@ public class Game1 : Core
         Rectangle wordMark = new Rectangle(150, 34, 458, 58);
 
         // TODO: Add your drawing code here
-        SpriteBatch.Begin();
+        // begin the sprite batch with SpriteSortMode.FrontToBack to allow for layerDepth sorting
+        SpriteBatch.Begin(sortMode: SpriteSortMode.FrontToBack);
 
         // use middle of the texture as the origin for rotation
         // use Vector2 for scale with dynamic scaling in x and y directions
         // use Color.White * _opacity for opacity with dynamic opacity
         // use rectangle for sourceRectangle to draw the icon portion of the texture separately from the word mark portion of the texture
-
+        // using layerDepth to draw the icon on top of the word mark
         SpriteBatch.Draw(
         _logo,                      // texture
         new Vector2(                // position
@@ -133,7 +134,7 @@ public class Game1 : Core
             icon.Height) * 0.5f,
         new Vector2(_scaleX, _scaleY),          // scale
         SpriteEffects.None,         // effects
-        0.0f                        // layerDepth
+        1.0f                        // layerDepth
         );
 
 
