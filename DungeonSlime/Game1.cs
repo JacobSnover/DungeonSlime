@@ -19,6 +19,7 @@ public class Game1 : Core
     private float _scaleX = 0.5f;
     private float _scaleY = 1.5f;
     private float _scaleModifier = 0.1f;
+    private float _opacity = 0.0f;
 
     public Game1()
         : base("Dungeon Slime", 1280, 720, false)
@@ -96,6 +97,7 @@ public class Game1 : Core
 
         _scaleX += _scaleModifier;
         _scaleY += -_scaleModifier;
+        _opacity += _scaleModifier;
 
         base.Update(gameTime);
     }
@@ -109,6 +111,7 @@ public class Game1 : Core
 
         // use middle of the texture as the origin for rotation
         // use Vector2 for scale with dynamic scaling in x and y directions
+        // use Color.White * _opacity for opacity with dynamic opacity
         // Draw the texture.
         SpriteBatch.Draw(
         _logo,                      // texture
@@ -116,7 +119,7 @@ public class Game1 : Core
             Window.ClientBounds.Width,
             Window.ClientBounds.Height) * 0.5f,
         null,                       // sourceRectangle
-        Color.White,                // color
+        Color.White * _opacity,                // color
         MathHelper.ToRadians(_angle), // rotation
         new Vector2(                // origin
             _logo.Width,
