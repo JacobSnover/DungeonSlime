@@ -24,7 +24,7 @@ public class Game1 : Core
     public Game1()
         : base("Dungeon Slime", 1280, 720, false)
     {
-       
+
     }
 
     protected override void Initialize()
@@ -106,28 +106,72 @@ public class Game1 : Core
     {
         GraphicsDevice.Clear(Color.Black);
 
+        // the bounds of the icon within the texture
+        Rectangle icon = new Rectangle(0, 0, 128, 128);
+
+        // the bounds of the word mark within the texture
+        Rectangle wordMark = new Rectangle(150, 34, 458, 58);
+
         // TODO: Add your drawing code here
         SpriteBatch.Begin();
 
         // use middle of the texture as the origin for rotation
         // use Vector2 for scale with dynamic scaling in x and y directions
         // use Color.White * _opacity for opacity with dynamic opacity
-        // Draw the texture.
+        // use rectangle for sourceRectangle to draw the icon portion of the texture separately from the word mark portion of the texture
+
         SpriteBatch.Draw(
         _logo,                      // texture
         new Vector2(                // position
             Window.ClientBounds.Width,
             Window.ClientBounds.Height) * 0.5f,
-        null,                       // sourceRectangle
+        icon,                       // sourceRectangle
         Color.White * _opacity,                // color
         MathHelper.ToRadians(_angle), // rotation
         new Vector2(                // origin
-            _logo.Width,
-            _logo.Height) * 0.5f,
+            icon.Width,
+            icon.Height) * 0.5f,
         new Vector2(_scaleX, _scaleY),          // scale
         SpriteEffects.None,         // effects
         0.0f                        // layerDepth
         );
+
+
+        SpriteBatch.Draw(
+        _logo,                      // texture
+        new Vector2(                // position
+            Window.ClientBounds.Width,
+            Window.ClientBounds.Height) * 0.5f,
+        wordMark,                   // sourceRectangle
+        Color.White * (1.0f - _opacity),                // color
+        MathHelper.ToRadians(_angle), // rotation
+        new Vector2(                // origin
+            wordMark.Width,
+            wordMark.Height) * 0.5f,
+        new Vector2(_scaleX, _scaleY),          // scale
+        SpriteEffects.None,         // effects
+        0.0f                        // layerDepth
+        );
+
+        // use middle of the texture as the origin for rotation
+        // use Vector2 for scale with dynamic scaling in x and y directions
+        // use Color.White * _opacity for opacity with dynamic opacity
+        // Draw the texture.
+        //SpriteBatch.Draw(
+        //_logo,                      // texture
+        //new Vector2(                // position
+        //    Window.ClientBounds.Width,
+        //    Window.ClientBounds.Height) * 0.5f,
+        //null,                       // sourceRectangle
+        //Color.White * _opacity,                // color
+        //MathHelper.ToRadians(_angle), // rotation
+        //new Vector2(                // origin
+        //    _logo.Width,
+        //    _logo.Height) * 0.5f,
+        //new Vector2(_scaleX, _scaleY),          // scale
+        //SpriteEffects.None,         // effects
+        //0.0f                        // layerDepth
+        //);
 
         // this code centers the logo
         // Draw the logo texture.
