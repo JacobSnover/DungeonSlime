@@ -15,7 +15,9 @@ public class Game1 : Core
     //private int _horDirection = 1;
     //private int _verDirection = 0;
     private int _angle = 0;
-    private float _scale = 0.5f;
+    //private float _scale = 0.5f;
+    private float _scaleX = 0.5f;
+    private float _scaleY = 1.5f;
     private float _scaleModifier = 0.1f;
 
     public Game1()
@@ -83,16 +85,17 @@ public class Game1 : Core
         }
 
         // scale the logo up and down between 0.5 and 1.5
-        if (_scale >= 1.5f)
+        if (_scaleX >= 1.5f)
         {
             _scaleModifier = -0.01f;
         }
-        else if (_scale <= 0.5f)
+        else if (_scaleX <= 0.5f)
         {
             _scaleModifier = 0.01f;
         }
 
-        _scale += _scaleModifier;
+        _scaleX += _scaleModifier;
+        _scaleY += -_scaleModifier;
 
         base.Update(gameTime);
     }
@@ -105,6 +108,7 @@ public class Game1 : Core
         SpriteBatch.Begin();
 
         // use middle of the texture as the origin for rotation
+        // use Vector2 for scale with dynamic scaling in x and y directions
         // Draw the texture.
         SpriteBatch.Draw(
         _logo,                      // texture
@@ -117,7 +121,7 @@ public class Game1 : Core
         new Vector2(                // origin
             _logo.Width,
             _logo.Height) * 0.5f,
-        _scale,                       // scale
+        new Vector2(_scaleX, _scaleY),          // scale
         SpriteEffects.None,         // effects
         0.0f                        // layerDepth
         );
