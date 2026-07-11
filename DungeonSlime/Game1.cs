@@ -23,8 +23,10 @@ public class Game1 : Core
     //private float _scaleModifier = 0.1f;
     //private float _opacity = 0.0f;
 
-    private TextureRegion _slime;
-    private TextureRegion _bat;
+    //private TextureRegion _slime;
+    //private TextureRegion _bat;
+    private Sprite _slime;
+    private Sprite _bat;
     public Game1()
         : base("Dungeon Slime", 1280, 720, false)
     {
@@ -51,9 +53,16 @@ public class Game1 : Core
         // Create the texture atlas from the XML configuration file
         TextureAtlas atlas = TextureAtlas.FromFile(Content, @"Images\atlas-definition.xml");
 
+        // Create the slime sprite from the atlas.
+        _slime = atlas.CreateSprite("slime");
+        _slime.Scale = new Vector2(4.0f, 4.0f);
 
-        _slime = atlas.GetRegion("slime");
-        _bat = atlas.GetRegion("bat");
+        // Create the bat sprite from the atlas.
+        _bat = atlas.CreateSprite("bat");
+        _bat.Scale = new Vector2(4.0f, 4.0f);
+
+        //_slime = atlas.GetRegion("slime");
+        //_bat = atlas.GetRegion("bat");
 
         //base.LoadContent();
     }
@@ -129,11 +138,17 @@ public class Game1 : Core
         // begin the sprite batch with SpriteSortMode.FrontToBack to allow for layerDepth sorting
         SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
+        // Draw the slime sprite.
+        _slime.Draw(SpriteBatch, Vector2.Zero);
+
+        // Draw the bat sprite 10px to the right of the slime.
+        _bat.Draw(SpriteBatch, new Vector2(_slime.Width + 10, 0));
+
         // Draw the slime texture region at a scale of 4.0
-        _slime.Draw(SpriteBatch, Vector2.Zero, Color.White, 0.0f, Vector2.One, 4.0f, SpriteEffects.None, 0.0f);
+        //_slime.Draw(SpriteBatch, Vector2.Zero, Color.White, 0.0f, Vector2.One, 4.0f, SpriteEffects.None, 0.0f);
 
         // Draw the bat texture region 10px to the right of the slime at a scale of 4.0
-        _bat.Draw(SpriteBatch, new Vector2(_slime.Width * 4.0f + 10, 0), Color.White, 0.0f, Vector2.One, 4.0f, SpriteEffects.None, 1.0f);
+        //_bat.Draw(SpriteBatch, new Vector2(_slime.Width * 4.0f + 10, 0), Color.White, 0.0f, Vector2.One, 4.0f, SpriteEffects.None, 1.0f);
 
 
         // use middle of the texture as the origin for rotation
