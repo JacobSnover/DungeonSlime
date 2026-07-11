@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGameLibrary;
 using MonoGameLibrary.Graphics;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace DungeonSlime;
 
@@ -42,10 +43,15 @@ public class Game1 : Core
         // TODO: use this.Content to load your game content here
         //_logo = Content.Load<Texture2D>("Images/logo");
 
-        Texture2D atlasTexture = Content.Load<Texture2D>("Images/atlas");
-        TextureAtlas atlas = new TextureAtlas(atlasTexture);
-        atlas.AddRegion("slime", 0, 0, 20, 20);
-        atlas.AddRegion("bat", 20, 0, 20, 20);
+        //Texture2D atlasTexture = Content.Load<Texture2D>("Images/atlas");
+        //TextureAtlas atlas = new TextureAtlas(atlasTexture);
+        //atlas.AddRegion("slime", 0, 0, 20, 20);
+        //atlas.AddRegion("bat", 20, 0, 20, 20);
+
+        // Create the texture atlas from the XML configuration file
+        TextureAtlas atlas = TextureAtlas.FromFile(Content, @"Images\atlas-definition.xml");
+
+
         _slime = atlas.GetRegion("slime");
         _bat = atlas.GetRegion("bat");
 
