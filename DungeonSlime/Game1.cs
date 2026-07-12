@@ -25,8 +25,10 @@ public class Game1 : Core
 
     //private TextureRegion _slime;
     //private TextureRegion _bat;
-    private Sprite _slime;
-    private Sprite _bat;
+    //private Sprite _slime;
+    //private Sprite _bat;
+    private AnimatedSprite _slime;
+    private AnimatedSprite _bat;
     public Game1()
         : base("Dungeon Slime", 1280, 720, false)
     {
@@ -53,13 +55,21 @@ public class Game1 : Core
         // Create the texture atlas from the XML configuration file
         TextureAtlas atlas = TextureAtlas.FromFile(Content, @"Images\atlas-definition.xml");
 
-        // Create the slime sprite from the atlas.
-        _slime = atlas.CreateSprite("slime");
+        // Create the slime animated sprite from the atlas.
+        _slime = atlas.CreateAnimatedSprite("slime-animation");
         _slime.Scale = new Vector2(4.0f, 4.0f);
 
-        // Create the bat sprite from the atlas.
-        _bat = atlas.CreateSprite("bat");
+        // Create the bat animated sprite from the atlas.
+        _bat = atlas.CreateAnimatedSprite("bat-animation");
         _bat.Scale = new Vector2(4.0f, 4.0f);
+
+        //// Create the slime sprite from the atlas.
+        //_slime = atlas.CreateSprite("slime");
+        //_slime.Scale = new Vector2(4.0f, 4.0f);
+
+        //// Create the bat sprite from the atlas.
+        //_bat = atlas.CreateSprite("bat");
+        //_bat.Scale = new Vector2(4.0f, 4.0f);
 
         //_slime = atlas.GetRegion("slime");
         //_bat = atlas.GetRegion("bat");
@@ -121,6 +131,9 @@ public class Game1 : Core
         //_scaleY += -_scaleModifier;
         //_opacity += _scaleModifier;
 
+        _slime.Update(gameTime);
+        _bat.Update(gameTime);
+
         base.Update(gameTime);
     }
 
@@ -139,7 +152,7 @@ public class Game1 : Core
         SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
         // Draw the slime sprite.
-        _slime.Draw(SpriteBatch, Vector2.Zero);
+        _slime.Draw(SpriteBatch, Vector2.One);
 
         // Draw the bat sprite 10px to the right of the slime.
         _bat.Draw(SpriteBatch, new Vector2(_slime.Width + 10, 0));
