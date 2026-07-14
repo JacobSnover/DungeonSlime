@@ -162,33 +162,37 @@ public class Game1 : Core
 
         if (keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W))
         {
-            _slimePosition.Y -= speed;
-            newDirection = -Vector2.UnitY;
+            //_slimePosition.Y -= speed;
+            //newDirection = -Vector2.UnitY;
+            _inputBuffer.Enqueue(-Vector2.UnitY);
         }
         if (keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.S))
         {
-            _slimePosition.Y += speed;
-            newDirection = Vector2.UnitY;
+            //_slimePosition.Y += speed;
+            //newDirection = Vector2.UnitY;
+            _inputBuffer.Enqueue(Vector2.UnitY);
         }
         if (keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A))
         {
-            _slimePosition.X -= speed;
-            newDirection = -Vector2.UnitX;
+            //_slimePosition.X -= speed;
+            //newDirection = -Vector2.UnitX;
+            _inputBuffer.Enqueue(-Vector2.UnitX);
         }
         if (keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D))
         {
-            _slimePosition.X += speed;
-            newDirection = Vector2.UnitX;
+            //_slimePosition.X += speed;
+            //newDirection = Vector2.UnitX;
+            _inputBuffer.Enqueue(Vector2.UnitX);            
         }
 
         // Only add if a valid direction and does not exceed the buffer size.
-        if (newDirection != Vector2.Zero && _inputBuffer.Count < MAX_BUFFER_SIZE)
-        {
-            _inputBuffer.Enqueue(newDirection);
-        }
+        //if (newDirection != Vector2.Zero && _inputBuffer.Count < MAX_BUFFER_SIZE)
+        //{
+        //    _inputBuffer.Enqueue(newDirection);
+        //}
 
         // In movement update code.
-        if (_inputBuffer.Count > 0)
+        while (_inputBuffer.Count > 0)
         {
             Vector2 nextDirection = _inputBuffer.Dequeue();
             _slimePosition += nextDirection * speed;
