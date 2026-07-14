@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGameLibrary;
 using MonoGameLibrary.Graphics;
+using System.Collections.Generic;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace DungeonSlime;
@@ -29,6 +30,13 @@ public class Game1 : Core
     //private Sprite _bat;
     private AnimatedSprite _slime;
     private AnimatedSprite _bat;
+    private Vector2 _slimePosition;
+    private const float MOVE_SPEED = 5.0f; // speed multiplier
+
+    // Use a queue directly for input buffering
+    private Queue<Vector2> _inputBuffer;
+    private const int MAX_BUFFER_SIZE = 2;
+
     public Game1()
         : base("Dungeon Slime", 1280, 720, false)
     {
@@ -38,6 +46,7 @@ public class Game1 : Core
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
+        _inputBuffer = new Queue<Vector2>(MAX_BUFFER_SIZE);
 
         base.Initialize();
     }
@@ -134,7 +143,100 @@ public class Game1 : Core
         _slime.Update(gameTime);
         _bat.Update(gameTime);
 
+        CheckKeyboardInput();
+        CheckGamePadInput();
+
         base.Update(gameTime);
+    }
+
+    private void CheckKeyboardInput()
+    {
+        KeyboardState keyboardState = Keyboard.GetState();
+        Vector2 newDirection = Vector2.Zero;
+
+        float speed = MOVE_SPEED;
+        if (keyboardState.IsKeyDown(Keys.Space))
+        {
+            speed *= 1.5f;            
+        }
+
+        if (keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W))
+        {
+            _slimePosition.Y -= speed;
+            newDirection = -Vector2.UnitY;
+        }
+        if (keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.S))
+        {
+            _slimePosition.Y += speed;
+            newDirection = Vector2.UnitY;
+        }
+        if (keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A))
+        {
+            _slimePosition.X -= speed;
+            newDirection = -Vector2.UnitX;
+        }
+        if (keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D))
+        {
+            _slimePosition.X += speed;
+            newDirection = Vector2.UnitX;
+        }
+
+        // Only add if a valid direction and does not exceed the buffer size.
+        if (newDirection != Vector2.Zero && _inputBuffer.Count < MAX_BUFFER_SIZE)
+        {
+            _inputBuffer.Enqueue(newDirection);
+        }
+
+        // In movement update code.
+        if (_inputBuffer.Count > 0)
+        {
+            Vector2 nextDirection = _inputBuffer.Dequeue();
+            _slimePosition += nextDirection * speed;
+        }
+    }
+
+    private void CheckGamePadInput()
+    {
+        GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
+
+        float speed = MOVE_SPEED;
+        if (gamePadState.IsButtonDown(Buttons.A))
+        {
+            speed *= 1.5f;
+            GamePad.SetVibration(PlayerIndex.One, 1.0f, 1.0f);
+        }
+        else
+        {
+            GamePad.SetVibration(PlayerIndex.One, 0.0f, 0.0f);
+        }
+
+        if(gamePadState.ThumbSticks.Left != Vector2.Zero)
+        {
+            _slimePosition.X += gamePadState.ThumbSticks.Left.X * speed;
+            _slimePosition.Y -= gamePadState.ThumbSticks.Left.Y * speed;
+        }
+        else
+        {
+            if (gamePadState.IsButtonDown(Buttons.DPadUp))
+            {
+                _slimePosition.Y -= speed;
+            }
+
+            if (gamePadState.IsButtonDown(Buttons.DPadDown))
+            {
+                _slimePosition.Y += speed;
+            }
+
+            if(gamePadState.IsButtonDown(Buttons.DPadLeft))
+            {
+                _slimePosition.X -= speed;
+            }
+
+            if(gamePadState.IsButtonDown(Buttons.DPadRight))
+            {
+                _slimePosition.X += speed;
+            }
+        }
     }
 
     protected override void Draw(GameTime gameTime)
@@ -152,7 +254,7 @@ public class Game1 : Core
         SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
         // Draw the slime sprite.
-        _slime.Draw(SpriteBatch, Vector2.One);
+        _slime.Draw(SpriteBatch, _slimePosition);
 
         // Draw the bat sprite 10px to the right of the slime.
         _bat.Draw(SpriteBatch, new Vector2(_slime.Width + 10, 0));
